@@ -40,7 +40,8 @@ def create_event(service, event):
 
 def delete_event(service, event):
     if event.eventId is not None:
-        service.events().delete(calendarId=calendar_id, eventId=event.eventId).execute()
+        try:        service.events().delete(calendarId=calendar_id, eventId=event.eventId).execute()
+        except:     print("There was a problem deleting the event. Maybe the event was manually deleted.")
 
 def update_event(service, event):
     service.events().update(calendarId=calendar_id, eventId=event.eventId, body=generate_json(event)).execute()
