@@ -5,3 +5,4 @@ NotionCalendar/
 .ipynb_checkpoints/
 __pycache__/
 *.pyc
+log.txt

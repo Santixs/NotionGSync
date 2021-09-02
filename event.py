@@ -19,9 +19,9 @@ class event:
         self.eventId = element['id'].replace('-','')       
         self.date = element['properties']['Date']['date']["start"]
    
-   
+
     def __eq__(self, e):
-            if not isinstance(self,e): return False
+            if not isinstance(self,type(e)): return False
             return self.subject == e.subject and self.type == e.type and e.name == self.name and self.date == e.date and self.comments==e.comments
    
     def __hash__(self):       
