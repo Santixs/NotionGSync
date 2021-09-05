@@ -7,3 +7,9 @@ Thanks to this project, I can take a look at all my events in the same calendar 
 
 The integration has been made using the REST API of notion and Google. For the authentication part, I have used a personal token for Notion and Oauth for google.
 
+The next steps are to implement a 2 ways sync (from G. Calendar to Notion too) using Incremental sync and lexical analyzers to transform the titles and comments of each event into the entities of the database.
+
+![alt text](https://github.com/Santixs/NotionGSync/blob/main/Images%20(for%20readme)/Notion.png)
+![alt text](https://github.com/Santixs/NotionGSync/blob/main/Images%20(for%20readme)/Gcalendar.png)
+
+
