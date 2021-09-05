@@ -48,10 +48,17 @@ def update_event(service, event):
 
 
 def generate_json(event):
+    if event.status == 'Urgente': event.icon = "⭐"
+
+    if event.type=="Exam": color = 11
+    elif event.type == "Assignment" and (event.progress == 100 or event.status == 'Completado'): color = 4; event.icon = "✔️"
+    else: color = 6    
+        
     event_to_add = {
     'id': event.eventId,
-    'summary': f'{event.type} {event.subject}: {event.name} ',  
-    'description': f'{event.type} de {event.subject}: {event.name} \n{event.comments}\nProgreso:{event.status}', 
+    'colorId':color,
+    'summary': f'{event.icon} {event.type[:1]}. {event.subject} {event.name} ',  
+    'description': f'{event.type}. of {event.subject}: {event.name} \n{event.comments} \n {f"Progreso: {str(event.progress)}" if event.progress >=0 else ""} Status: {event.status}', 
     'start': {
         'date': event.date,        
     },

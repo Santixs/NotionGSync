@@ -2,7 +2,7 @@ class event:
     def __init__(self, element): 
 
         try:        self.subject = element['properties']['Subject']["select"]['name']
-        except:     self.subject = "No name"
+        except:     self.subject = ""
 
         try:        self.type = element['properties']['Type']["select"]['name']
         except:     self.type = " "
@@ -16,13 +16,18 @@ class event:
         try:        self.status = element['properties']['Status']['multi_select'][0]['name']
         except:     self.status = " "
 
+        self.progress = element['properties']['Progress']['number']; 
+        if self.progress == None: self.progress = -1
+        
+
+        self.icon = ""
         self.eventId = element['id'].replace('-','')       
         self.date = element['properties']['Date']['date']["start"]
    
 
     def __eq__(self, e):
             if not isinstance(self,type(e)): return False
-            return self.subject == e.subject and self.type == e.type and e.name == self.name and self.date == e.date and self.comments==e.comments
+            return self.subject == e.subject and self.type == e.type and e.name == self.name and self.date == e.date and self.comments==e.comments and self.progress == e.progress and self.status == e.status
    
     def __hash__(self):       
         return hash((self.subject, self.type, self.name, self.date, self.comments))
