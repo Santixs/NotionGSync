@@ -11,10 +11,10 @@ def main():
     print("Connecting to the bbdd")
 
     bbdd = NotionGet(token = token_notion)
-    query = {"filter": {"property": "Sync","checkbox": {"equals": True}}}
+    query = {"sorts": [{"property": "Date","direction": "ascending"}]}
+    
     NewestData = bbdd.query_database(database_id, query)
     bbdd.save_json("data/dataNew.json") #Aqui guardamos el json y justo después lo abrimos en notionSYnc, ver si se puede pasar como param
-
 
     if os.path.isfile('data/dataOld.json'):
         print("There is a previous record")         

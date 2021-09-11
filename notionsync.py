@@ -26,14 +26,14 @@ class NotionGet:
   
 
 
-   
-
 def get_events(origin):         
     return [event(i) for i in origin["results"] if i['properties']['Date']['date'] is not None] 
     #To create an event, at least, it has to have a date
 
-def get_changes():
-            
+
+def get_changes():   
+    
+
     with open("data/dataNew.json") as f:
         NewestData = json.load(f)
     
@@ -42,19 +42,26 @@ def get_changes():
     
     NewEv = get_events(NewestData)
     OldEv = get_events(OldestData)       
+    
+    added = [];     modified = [];    removed= []
 
-    added =  [x for x in NewEv if x not in OldEv]
-    deleted = [x for x in OldEv if x not in NewEv]
+    for ne in NewEv: 
+        j = 0; found = False
 
-    modified=[]
-    for e in added:
-        for e2 in deleted:
-            if e.eventId == e2.eventId and e is not e2: 
-                modified.append(e)
-                added.remove(e)
-                deleted.remove(e2)
-                
-    return {"added": added, "deleted": deleted, "modified":modified}
+        while not found and j < len(OldEv) :    
+            oe = OldEv[j]; j+=1
+            if ne == oe:  OldEv.remove(oe); found = True; 
+            elif ne.eventId == oe.eventId: OldEv.remove(oe); modified.append(ne); found = True;       
+            
+        if not found: added.append(ne)
 
-#Create a dictionary with the objects of class 'element' which contains the properties (name, type, subject, ...)
+    removed.extend(OldEv)
 
+#     ---------- For debugging purposes ---------#     
+#     aa = []; mm = []; rr = []
+#     for e in added: aa.append(e.name)
+#     for e in modified: mm.append(e.name)
+#     for e in removed: rr.append(e.name)
+#     print(f"added: {aa} modified {mm} removed: {rr}")
+
+    return {"added": added, "deleted": removed, "modified":modified}
