@@ -39,17 +39,18 @@ def create_event(service, event):
     try:
         eventAdded = service.events().insert(calendarId=calendar_id, body=generate_json(event)).execute()
         print(f'added {event.name} {event.date} {event.eventId}')
-    except:     save_error("creating", event.name)
+    except Exception as e:
+        save_error("creating", event.name, e)
 
 def delete_event(service, event):
     if event.eventId is not None:
         try:        service.events().delete(calendarId=calendar_id, eventId=event.eventId).execute()
-        except:     save_error("deleting", event.name)
+        except Exception as e:      save_error("deleting", event.name, e)
 
 
 def update_event(service, event):
         try:    service.events().update(calendarId=calendar_id, eventId=event.eventId, body=generate_json(event)).execute()
-        except:     save_error("updating", event.name)
+        except Exception as e:   save_error("updating", event.name, e)
 
 
 
@@ -74,7 +75,7 @@ def generate_json(event):
         datetype : event.date,        
     },
     'end': {
-       datetype : event.endDate,        
+        datetype : event.endDate,        
     },    
     'reminders': {
         'useDefault': False,
@@ -85,9 +86,9 @@ def generate_json(event):
     }  
     return event_to_add
 
-def save_error(type, name):
+def save_error(type, name, msg = ""):
     text = f"{datetime.datetime.now()} --> Error while {type} the following event: {name} \n"
     file_object = open('errors.log', 'a')
     file_object.write(text)
-    print (text)
+    print (f"{text}  \n  {msg}")
     file_object.close()

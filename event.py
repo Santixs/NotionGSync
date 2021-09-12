@@ -21,8 +21,8 @@ class event:
         try:        self.status = element['properties']['Status']['multi_select'][0]['name']
         except:     self.status = " "
 
-        try:        self.endDate = element['properties']['Date']['date']["end"]
-        except:     self.endDate = self.date
+        self.endDate = element['properties']['Date']['date']["end"]
+        if self.endDate == None:   self.endDate = self.date
 
         self.progress = element['properties']['Progress']['number']; 
         if self.progress == None: self.progress = -1
