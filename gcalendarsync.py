@@ -56,11 +56,12 @@ def update_event(service, event):
 
 def generate_json(event):
     if event.status == 'Urgente': event.icon = "⭐"
+    elif event.progress == 100 or event.status == 'Completado':  event.icon = "✔️"
 
     if event.type=="Exam": color = 11
-    elif event.type == "Assignment" and (event.progress == 100 or event.status == 'Completado'): color = 4; event.icon = "✔️"
+    elif event.type == "Assignment": color = 4
     else: color = 6    
-
+   
     #We have to differentiate between the yyy-mm-dd format and the RFC3339 format
     if len(event.date)>11:date = datetype = "dateTime"
     else: datetype = "date"
