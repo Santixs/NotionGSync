@@ -4,7 +4,8 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
-import datetime
+from datetime import datetime, timedelta
+
 
 calendar_id = os.environ.get('calendar_id')
 SCOPES = ['https://www.googleapis.com/auth/calendar']
@@ -62,9 +63,12 @@ def generate_json(event):
     elif event.type == "Assignment": color = 4
     else: color = 6    
    
-    #We have to differentiate between the yyy-mm-dd format and the RFC3339 format
+    #We have to differentiate between the yyy-mm-dd format and the RFC3339 format. 
+    #In the case of all day events, for Notion, the start day and the end day is the same, for G. Calendar the end day is the next one.
     if len(event.date)>11:date = datetype = "dateTime"
-    else: datetype = "date"
+    else: datetype = "date";  event.endDate = datetime.strftime(datetime.strptime(event.endDate, '%Y-%m-%d') + timedelta(1),'%Y-%m-%d')
+
+    
 
 
     event_to_add = {
@@ -88,7 +92,7 @@ def generate_json(event):
     return event_to_add
 
 def save_error(type, name, msg = ""):
-    text = f"{datetime.datetime.now()} --> Error while {type} the following event: {name} \n"
+    text = f"{datetime.now()} --> Error while {type} the following event: {name} \n"
     file_object = open('errors.log', 'a')
     file_object.write(text)
     print (f"{text}  \n  {msg}")
